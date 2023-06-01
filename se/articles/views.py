@@ -4,9 +4,12 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from .forms import AccountForm, AddAccountForm
+from .forms import AccountForm, AddAccountForm, ArticleForm
 from typing import Any, Union
+from .models import Article
+from django.contrib.auth.models import User
 
 def Login(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -48,7 +51,7 @@ class AccountRegistration(TemplateView):
         self.params["AccountCreate"] = False
         return render(request, "articles/signup.html", context=self.params)
     
-    def post(self,request: HttpRequest) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse:
         self.params["account_form"] = AccountForm(data=request.POST)
         self.params["add_account_form"] = AddAccountForm(data=request.POST)
 
@@ -71,3 +74,21 @@ class AccountRegistration(TemplateView):
             print(self.params["account_form"].errors)
 
         return render(request,"articles/signup.html",context=self.params)
+
+class Draft(LoginRequiredMixin, TemplateView):
+    def __init__(self) -> None:
+        self.params: dict = {
+            "article_form": ArticleForm(),
+        }
+
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        self.params["article_form"] = ArticleForm()
+        return render(request, "articles/draft.html", context=self.params)
+    
+    def post(self, request: HttpRequest) -> HttpResponse: 
+        self.params["article_form"] = ArticleForm(data=request.POST)
+        if self.params["article_form"].is_valid():
+            editor = User.objects.get(username=self.request.user)
+            Article.objects.create(user=editor,title=request.POST.get("title"),content=request.POST.get("content"))
+            return HttpResponseRedirect(reverse("articles:index"))
+        return HttpResponseRedirect(reverse("articles:draft"))
