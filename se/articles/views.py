@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,7 @@ from .forms import AccountForm, AddAccountForm, ArticleForm
 from typing import Any, Union
 from .models import Article
 from django.contrib.auth.models import User
+from uuid import UUID
 
 def Login(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -34,7 +35,10 @@ def Logout(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def index(request: HttpRequest) -> HttpResponse:
-    params = {"UserID": request.user,}
+    params = {
+        "UserID": request.user,
+        "article_list": Article.objects.all(),
+    }
     return render(request, "articles/index.html", context=params)
 
 class AccountRegistration(TemplateView):
@@ -92,3 +96,9 @@ class Draft(LoginRequiredMixin, TemplateView):
             Article.objects.create(user=editor,title=request.POST.get("title"),content=request.POST.get("content"))
             return HttpResponseRedirect(reverse("articles:index"))
         return HttpResponseRedirect(reverse("articles:draft"))
+
+
+@login_required
+def Postview(request: HttpRequest, article_id: UUID) -> HttpResponse:
+    article = get_object_or_404(Article, pk=article_id)
+    return render(request, "articles/posts.html", {"article": article})

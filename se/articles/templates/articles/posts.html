@@ -1,0 +1,14 @@
+{% load markdown_extras %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+</head>
+<body>
+    <h1>{{ article.title }}</h1>
+    <div>
+        {{ article.content|markdown|safe }}
+    </div>
+</body>
+</html>
