@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import AccountForm, AddAccountForm
-from typing import Any
+from typing import Any, Union
 
 def Login(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -16,7 +16,7 @@ def Login(request: HttpRequest) -> HttpResponse:
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse("articles:home"))
+                return HttpResponseRedirect(reverse("articles:index"))
             else:
                 return HttpResponse("アカウントが有効ではありません")
         else:
@@ -30,13 +30,13 @@ def Logout(request: HttpRequest) -> HttpResponse:
     return HttpResponseRedirect(reverse("articles:login"))
 
 @login_required
-def home(request: HttpRequest) -> HttpResponse:
+def index(request: HttpRequest) -> HttpResponse:
     params = {"UserID": request.user,}
-    return render(request, "articles/home.html", context=params)
+    return render(request, "articles/index.html", context=params)
 
 class AccountRegistration(TemplateView):
     def __init__(self) -> None:
-        self.params = {
+        self.params: dict = {
             "AccountCreate":False,
             "account_form": AccountForm(),
             "add_account_form": AddAccountForm(),

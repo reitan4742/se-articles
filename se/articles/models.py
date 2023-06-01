@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from mdeditor.fields import MDTextField
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,4 +11,7 @@ class Account(models.Model):
 
     def __str__(self) -> str:
         return self.user.username
-    
+
+class Article(models.Model):
+    title: models.CharField = models.CharField(max_length=100)    
+    content: MDTextField = MDTextField()
