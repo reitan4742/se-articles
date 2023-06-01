@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Index:{{ UserID }}</title>
+</head>
+<body>
+    <h1>Welcome to se-lab's articles application</h1>
+    <ul>
+        {% for article in article_list %}
+        <div>
+            <li><a href="{% url 'articles:posts' article.article_id %}">{{ article.title }}</a></li>
+        </div>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'articles:logout' %}">Logout</a>
+    <a href="{% url 'articles:draft' %}">post</a>
+</body>
+</html>

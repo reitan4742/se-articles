@@ -3,8 +3,10 @@ from . import views
 
 app_name = "articles"
 urlpatterns = [
+    path("", views.index, name="index"),
     path("login/", views.Login, name="login"),
     path("logout/", views.Logout, name="logout"),
-    path("home/", views.home, name="home"),
-    path("register/", views.AccountRegistration.as_view(), name="register"),
+    path("signup/", views.AccountRegistration.as_view(), name="signup"),
+    path("draft/", views.Draft.as_view(), name="draft"),
+    path("<str:article_id>/posts", views.Postview, name="posts")
 ]

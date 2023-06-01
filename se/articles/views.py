@@ -1,12 +1,16 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from .forms import AccountForm, AddAccountForm
-from typing import Any
+from .forms import AccountForm, AddAccountForm, ArticleForm
+from typing import Any, Union
+from .models import Article
+from django.contrib.auth.models import User
+from uuid import UUID
 
 def Login(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -16,7 +20,7 @@ def Login(request: HttpRequest) -> HttpResponse:
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse("articles:home"))
+                return HttpResponseRedirect(reverse("articles:index"))
             else:
                 return HttpResponse("アカウントが有効ではありません")
         else:
@@ -30,13 +34,16 @@ def Logout(request: HttpRequest) -> HttpResponse:
     return HttpResponseRedirect(reverse("articles:login"))
 
 @login_required
-def home(request: HttpRequest) -> HttpResponse:
-    params = {"UserID": request.user,}
-    return render(request, "articles/home.html", context=params)
+def index(request: HttpRequest) -> HttpResponse:
+    params = {
+        "UserID": request.user,
+        "article_list": Article.objects.all(),
+    }
+    return render(request, "articles/index.html", context=params)
 
 class AccountRegistration(TemplateView):
     def __init__(self) -> None:
-        self.params = {
+        self.params: dict = {
             "AccountCreate":False,
             "account_form": AccountForm(),
             "add_account_form": AddAccountForm(),
@@ -46,9 +53,9 @@ class AccountRegistration(TemplateView):
         self.params["account_form"] = AccountForm()
         self.params["add_account_form"] = AddAccountForm()
         self.params["AccountCreate"] = False
-        return render(request, "articles/register.html", context=self.params)
+        return render(request, "articles/signup.html", context=self.params)
     
-    def post(self,request: HttpRequest) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse:
         self.params["account_form"] = AccountForm(data=request.POST)
         self.params["add_account_form"] = AddAccountForm(data=request.POST)
 
@@ -70,4 +77,28 @@ class AccountRegistration(TemplateView):
         else:
             print(self.params["account_form"].errors)
 
-        return render(request,"articles/register.html",context=self.params)
+        return render(request,"articles/signup.html",context=self.params)
+
+class Draft(LoginRequiredMixin, TemplateView):
+    def __init__(self) -> None:
+        self.params: dict = {
+            "article_form": ArticleForm(),
+        }
+
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        self.params["article_form"] = ArticleForm()
+        return render(request, "articles/draft.html", context=self.params)
+    
+    def post(self, request: HttpRequest) -> HttpResponse: 
+        self.params["article_form"] = ArticleForm(data=request.POST)
+        if self.params["article_form"].is_valid():
+            editor = User.objects.get(username=self.request.user)
+            Article.objects.create(user=editor,title=request.POST.get("title"),content=request.POST.get("content"))
+            return HttpResponseRedirect(reverse("articles:index"))
+        return HttpResponseRedirect(reverse("articles:draft"))
+
+
+@login_required
+def Postview(request: HttpRequest, article_id: UUID) -> HttpResponse:
+    article = get_object_or_404(Article, pk=article_id)
+    return render(request, "articles/posts.html", {"article": article})

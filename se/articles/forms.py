@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Account
+from .models import Account, Article
+from mdeditor.fields import MDTextFormField
 
 class AccountForm(forms.ModelForm):
     password: forms.CharField = forms.CharField(widget=forms.PasswordInput(), label="パスワード")
@@ -15,3 +16,13 @@ class AddAccountForm(forms.ModelForm):
         model = Account
         fields = ("last_name","first_name","klass","account_image",)
         labels = {"last_name":"苗字","first_name":"名前","klass":"期生","account_image":"写真アップロード",}
+
+# class ArticleForm(forms.Form):
+#     title: forms.CharField = forms.CharField()
+#     content = MDTextFormField()
+
+class ArticleForm(forms.ModelForm):
+    class Meta():
+        model = Article
+        fields = ("title","content",)
+        labels = {"title":"タイトル","content":"記事",}
