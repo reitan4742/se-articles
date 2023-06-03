@@ -9,4 +9,4 @@ cd se
 make db
 make run
 ```
-[http://localhost:8000/](http://localhost:8000/)
+port:8000
