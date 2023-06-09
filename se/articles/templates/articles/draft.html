@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit</title>
-    <meta http-equiv="Content-Type" content="text/html">
-</head>
-<body>
-    <form enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        {{ article_form.media }}
-        {{ article_form.as_p }}
-        <input type="submit" value="post">
-    </form> 
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit</title>
+        <meta http-equiv="Content-Type" content="text/html">
+    </head>
+    <body>
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ article_form.media }}
+            {{ article_form.as_p }}
+            <input type="submit" value="post">
+        </form>
+    </body>
 </html>

@@ -1,32 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
-<head>
-<meta charset="utf-8">
-<title>Register</title>
-</head>
-
-<body>
-<h1>Register</h1>
-
- {% if AccountCreate %}
-   <h1>登録完了!</h1>
-
- {% else %}
-   <div>
-   <table>
-
-   <form enctype="multipart/form-data" method="post">
-   {% csrf_token %}
-   {{ account_form.as_table }}
-   {{ add_account_form.as_table }}
-   <tr><td></td><td>
-   <input type="submit" name="" value="登録">
-   </td></tr>
-   </form>
-
-   </table>
-   </div>
- {% endif %}
- <a href="{% url 'articles:login' %}">back to login page</a>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Register</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
+    </head>
+    <body class="p-3">
+        <h1 class="text-center">Register</h1>
+        {% if AccountCreate %}
+            <h1 class="text-center">登録完了!</h1>
+        {% else %}
+            <form class="w-50 h-auto mx-auto border border-primary p-3 rounded-3"
+                  enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                {% for item in account_form %}
+                    <div class="mb-3 w-50 mx-auto">
+                        <label for="{{ item.id_for_label }}">{{ item.label }}</label>
+                        <input class="form-control"
+                               id="{{ item.id_for_label }}"
+                               type="{{ item.field.widget.input_type }}"
+                               name="{{ item.name }}">
+                    </div>
+                {% endfor %}
+                {% for item in add_account_form %}
+                    <div class="mb-3 w-50 mx-auto">
+                        <label for="{{ item.id_for_label }}">{{ item.label }}</label>
+                        <input class="form-control"
+                               id="{{ item.id_for_label }}"
+                               type="{{ item.field.widget.input_type }}"
+                               name="{{ item.name }}">
+                    </div>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="" value="登録">
+                    </td>
+                </tr>
+            </form>
+        {% endif %}
+        <div class="text-end">
+            <a class="btn btn-link"href="{% url 'articles:login' %}">back to login page</a>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                crossorigin="anonymous"></script>
+    </body>
 </html>
