@@ -6,3 +6,5 @@ strict:
 		mypy --strict --config-file mypy.ini .
 test:
 		python manage.py test self_introduction
+lint:
+		djlint articles/templates/articles/*.html --reformat
