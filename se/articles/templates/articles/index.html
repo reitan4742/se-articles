@@ -14,10 +14,11 @@
             <div class="mb-3">
                 <h3 class="text-center">投稿一覧</h3>
                 {% for article in article_list %}
-                <a class="list-group-item list-group-item-action" href="{% url 'articles:posts' article.article_id %}">{{ article.title }}</a>
+                    <a class="list-group-item list-group-item-action"
+                       href="{% url 'articles:posts' article.article_id %}">{{ article.title }}</a>
                 {% endfor %}
             </div>
-                <a class="btn btn-secondary" href="{% url 'articles:logout' %}">Logout</a>
+            <a class="btn btn-secondary" href="{% url 'articles:logout' %}">Logout</a>
             <a class="btn btn-primary" href="{% url 'articles:draft' %}">post</a>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
