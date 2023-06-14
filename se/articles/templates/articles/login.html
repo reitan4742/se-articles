@@ -25,6 +25,11 @@
                        name="password"
                        placeholder="PASSWORD">
             </div>
+            <div class="text-danger mb-3 w-50 mx-auto">
+                {% for message in messages %}
+                    <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
             <input class ="btn btn-primary" type="submit" value="Login">
         </form>
         <div class="text-end">

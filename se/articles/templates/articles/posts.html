@@ -42,7 +42,7 @@
                         </li>
                     </ul>
                     <div class="d-flex">
-                        <p class="me-2 my-auto text-light">{{ UserID }}</p>
+                        <p class="me-2 my-auto text-light">{{ request.user }}</p>
                         <a class="btn btn-outline-light" href="{% url 'articles:logout' %}">Logout</a>
                     </div>
                 </div>

@@ -37,6 +37,9 @@
                                type="{{ item.field.widget.input_type }}"
                                name="{{ item.name }}">
                     </div>
+                    <div class="w-50 mx-auto text-danger ps-2">
+                        {% for error in item.errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
                 {% endfor %}
                 <input class="btn btn-primary" type="submit" value="登録">
             </form>
