@@ -9,25 +9,60 @@
               integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
               crossorigin="anonymous">
     </head>
-    <body class="p-3">
-        <form class="w-100 h-auto mx-auto p-3"
-              enctype="multipart/form-data"
-              method="post">
-            {% csrf_token %}
-            {{ article_form.media }}
-            {% comment %} {{ article_form.as_div }} {% endcomment %}
-            {% for item in article_form %}
-                <div class="mb-3 w-100 mx-auto">
-                    <label for="{{ item.id_for_label }}">{{ item.label }}</label>
-                    {{ item }}
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light"
+             style="background-color: #4169e1">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" href="{% url 'articles:index' %}">Navbar</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                               aria-current="page"
+                               href="{% url 'articles:index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                               aria-current="page"
+                               href="{% url 'articles:draft' %}">Post</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <p class="me-2 my-auto text-light">{{ UserID }}</p>
+                        <a class="btn btn-outline-light" href="{% url 'articles:logout' %}">Logout</a>
+                    </div>
                 </div>
-            {% endfor %}
-            <div class="text-end">
-                <input class="btn btn-primary" type="submit" value="post">
             </div>
-        </form>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-                crossorigin="anonymous"></script>
+        </nav>
+        <div class="p-3">
+            <form class="w-100 h-auto mx-auto p-3"
+                  enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                {{ article_form.media }}
+                {% comment %} {{ article_form.as_div }} {% endcomment %}
+                {% for item in article_form %}
+                    <div class="mb-3 w-100 mx-auto">
+                        <label for="{{ item.id_for_label }}">{{ item.label }}</label>
+                        {{ item }}
+                    </div>
+                {% endfor %}
+                <div class="text-end">
+                    <input class="btn btn-primary" type="submit" value="post">
+                </div>
+            </form>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                    crossorigin="anonymous"></script>
+        </div>
     </body>
 </html>

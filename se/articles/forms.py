@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Account, Article
 from mdeditor.fields import MDTextFormField
+from typing import Any
 
 class AccountForm(forms.ModelForm):
     password: forms.CharField = forms.CharField(widget=forms.PasswordInput(), label="パスワード")
@@ -22,7 +23,7 @@ class AddAccountForm(forms.ModelForm):
 #     content = MDTextFormField()
 
 class ArticleForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(ArticleForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"

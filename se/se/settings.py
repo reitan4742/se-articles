@@ -136,6 +136,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "articles:login"
+LOGIN_REDIRECT_URL = "articles:index"
+LOGOUT_REDIRECT_URL = "articles:login"
+SESSION_COOKIE_AGE = 300
+SESSION_SAVE_EVERY_REQUEST = True
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
