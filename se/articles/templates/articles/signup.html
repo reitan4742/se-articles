@@ -25,9 +25,6 @@
                                type="{{ item.field.widget.input_type }}"
                                name="{{ item.name }}">
                     </div>
-                    <div class="w-50 mx-auto text-danger ps-2">
-                        {% for error in item.errors %}<p>{{ error }}</p>{% endfor %}
-                    </div>
                 {% endfor %}
                 {% for item in add_account_form %}
                     <div class="mb-3 w-50 mx-auto">
