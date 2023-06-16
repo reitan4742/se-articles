@@ -53,9 +53,9 @@
                                href="{% url 'articles:posts' article.article_id %}">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ article.title }}</h5>
-                                    <small>time</small>
+                                    <small>{{ article.pub_date }}</small>
                                 </div>
-                                <small>{{ UserID }}</small>
+                                <small>{{ article.user }}</small>
                             </a>
                         {% endfor %}
                     </div>
