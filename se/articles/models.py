@@ -16,6 +16,7 @@ class Account(models.Model):
 class Article(models.Model):
     article_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pub_date: models.DateTimeField = models.DateTimeField("publish_time")
     title: models.CharField = models.CharField(max_length=100)    
     content: MDTextField = MDTextField()
 

@@ -12,6 +12,7 @@ from .models import Article
 from django.contrib.auth.models import User
 from uuid import UUID
 from django.contrib import messages
+from django.utils import timezone
 
 def Login(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -95,7 +96,8 @@ class Draft(LoginRequiredMixin, TemplateView):
         self.params["article_form"] = ArticleForm(data=request.POST)
         if self.params["article_form"].is_valid():
             editor = User.objects.get(username=self.request.user)
-            Article.objects.create(user=editor,title=request.POST.get("title"),content=request.POST.get("content"))
+            publish_time = timezone.now()
+            Article.objects.create(user=editor, pub_date=publish_time, title=request.POST.get("title"), content=request.POST.get("content"))
             return HttpResponseRedirect(reverse("articles:index"))
         else:
             print(self.params["article_form"].errors)
