@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from .forms import AccountForm, AddAccountForm, ArticleForm
 from typing import Any, Union
 from .models import Article
+from .models import Account
 from django.contrib.auth.models import User
 from uuid import UUID
 from django.contrib import messages
@@ -108,3 +109,11 @@ class Draft(LoginRequiredMixin, TemplateView):
 def Postview(request: HttpRequest, article_id: UUID) -> HttpResponse:
     article = get_object_or_404(Article, pk=article_id)
     return render(request, "articles/posts.html", {"article": article})
+
+@login_required
+def Mypage(request: HttpRequest) -> HttpResponse:
+    params = {
+        "UserID": request.user,
+        "article_list": Article.objects.filter(user=User.objects.get(username=request.user)),
+    }
+    return render(request, "articles/mypage.html", context=params)
